@@ -1,0 +1,26 @@
+{
+    "extends": ["tslint:recommended", "tslint-config-prettier"],
+    "rules": {
+        "object-literal-sort-keys": false,
+        "ordered-imports": false,
+        "align": [
+            true,
+            "statements",
+            "members",
+            "elements"
+        ],
+        "await-promise": [
+            true,
+            "RequestPromise",
+            "Bluebird"
+        ],
+        "no-return-await": true,
+        "no-for-in-array": true,
+        "no-floating-promises": true,
+        "interface-name": false,
+        "no-console": false,
+        "jsx-wrap-multiline": false,
+        "jsx-no-multiline-js": false,
+        "jsx-no-lambda": false
+    }
+}
