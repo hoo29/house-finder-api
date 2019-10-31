@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+  pre_build:
+    commands:
+      - npm install
+  build:
+    commands:
+      - npm run build
+      - cp package* ./build
+      - cd build && npm install --production
+artifacts:
+  files:
+    - build/*
+cache:
+  paths:
+    - node_modules/*
+    - build/node_modules/*
