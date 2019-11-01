@@ -11,7 +11,7 @@ phases:
     commands:
       - npm run build
       - cp package* ./build
-      - cd build && npm install --production
+      - cd build && npm install --production && cd ..
   post_build:
     commands:
       - aws cloudformation package --template-file sam.template.yml --s3-bucket $BUCKET --output-template-file outputtemplate.yml
