@@ -1,7 +1,8 @@
 import { APIGatewayEvent } from 'aws-lambda';
 
-import { connect, checkCache, updateCache } from './database/database.service';
+import { connect, updateCache } from './database/database.service';
 import { getIsochrone } from './maps/maps.service';
+import { IsochroneRequest } from './database/database.model';
 
 connect(process.env.DATABASE_URL!)
     .then(() => console.info('database connected'))
@@ -10,14 +11,21 @@ connect(process.env.DATABASE_URL!)
         process.exit(1);
     });
 
-export const handler = async (event: APIGatewayEvent) => {
-    const body = JSON.parse(event.body!);
-    const found = await checkCache(body);
-    if (found != null) {
-        return found.polygonResults;
-    } else {
-        const results = await getIsochrone(body);
-        await updateCache({ ...body, polygonResults: results });
-        return results;
+export async function handler(event: APIGatewayEvent) {
+    const request = JSON.parse(event.body!) as IsochroneRequest;
+    switch (event.httpMethod.toLowerCase()) {
+        case 'post':
+            return handlePost(request);
+        default:
+            throw new Error(`unsupported operation ${event.httpMethod.toLowerCase()}`);
     }
-};
+}
+
+async function handlePost(request: IsochroneRequest) {
+    const results = await getIsochrone(request);
+    if (request.cache) {
+        await updateCache({ ...request, polygonResults: results, user: 'me' });
+    }
+
+    return results;
+}

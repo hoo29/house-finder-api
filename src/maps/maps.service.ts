@@ -21,6 +21,7 @@ async function pollAsync(res: any) {
         const timeOut = res.resourceSets[0].resources[0].callbackInSeconds * 1000;
         console.debug('waiting', timeOut);
         await setTimeoutProm(timeOut);
+        console.debug('getting next async result');
         res = await rp.get(callBackUrl, { json: true });
         checkForErrors(res);
         done = res.resourceSets[0].resources[0].isCompleted;
@@ -42,6 +43,9 @@ export async function getIsochrone(query: IsochroneRequest) {
     console.debug('getting results');
     const results = await rp.get(resUrl, { json: true });
     const polyData = results.resourceSets[0].resources[0].polygons;
+    if (typeof polyData === 'undefined') {
+        throw new Error(`error in results: ${results.resourceSets[0].resources[0].errorMessage}`);
+    }
     console.debug('got results');
     return polyData;
 }

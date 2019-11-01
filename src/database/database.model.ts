@@ -6,14 +6,25 @@ enum TRAVEL_MODES {
     transit,
 }
 
+enum OPTIMIZE_MODES {
+    distance,
+    time,
+    timeWithTraffic,
+}
+
 export interface IsochroneRequest {
     waypoint: string;
     maxTime: number;
-    travelMode: TRAVEL_MODES;
     maxDistance?: string;
+    dateTime?: number;
+    optimize?: OPTIMIZE_MODES;
+    travelMode: TRAVEL_MODES;
+    cache: boolean;
 }
+
 export interface IsochroneResult extends IsochroneRequest {
     polygonResults: any[];
+    user: string;
 }
 
 export interface IsochroneCacheModel extends Document, IsochroneResult {}
@@ -24,17 +35,28 @@ const cacheSchema = new Schema({
         required: true,
     },
     maxTime: { type: Number, required: true },
+    maxDistance: {
+        type: Number,
+    },
+    dateTime: {
+        type: Number,
+        required: true,
+    },
+    optimize: {
+        type: String,
+        enum: ['distance', 'time', 'timeWithTraffic'],
+    },
     travelMode: {
         type: String,
         enum: ['driving', 'walking', 'transit'],
         required: true,
     },
-    maxDistance: {
+    user: {
         type: String,
+        index: true,
+        required: true,
     },
     polygonResults: { type: [], required: true },
 });
-
-cacheSchema.index({ waypoint: 1, maxTime: 1, travelMode: 1, maxDistance: 1 });
 
 export const IsochroneCacheModel = model<IsochroneCacheModel>('isochrones', cacheSchema);

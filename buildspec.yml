@@ -12,9 +12,14 @@ phases:
       - npm run build
       - cp package* ./build
       - cd build && npm install --production
+  post_build:
+    commands:
+      - aws cloudformation package --template-file sam.template.yml --s3-bucket $BUCKET --output-template-file outputtemplate.yml
 artifacts:
+  type: zip
   files:
-    - build/*
+    - sam.template.yml
+    - outputtemplate.yml
 cache:
   paths:
     - node_modules/*
