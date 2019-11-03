@@ -63,4 +63,4 @@ typings/
 .next
 
 tsconfig.tsbuildinfo
-sam.output.template.yml
+**/sam.output.template.yml
