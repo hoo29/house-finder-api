@@ -28,7 +28,7 @@ export interface IsochroneRequest {
     timeUnit?: TIME_UNITS;
     maxDistance?: string;
     distanceUnit?: DISTANCE_UNITS;
-    dateTime?: number;
+    dateTime?: string;
     optimize?: OPTIMIZE_MODES;
     travelMode: TRAVEL_MODES;
     cache: boolean;
@@ -59,7 +59,7 @@ const cacheSchema = new Schema({
         enum: ['mi', 'km'],
     },
     dateTime: {
-        type: Number,
+        type: Date,
         required: true,
     },
     optimize: {
