@@ -37,25 +37,13 @@ Resources:
         Id: key-default-1
         Statement:
         - Action:
-          - kms:Create*
-          - kms:Encrypt
-          - kms:Describe*
-          - kms:Enable*
-          - kms:List*
-          - kms:Put*
-          - kms:Update*
-          - kms:Revoke*
-          - kms:Disable*
-          - kms:Get*
-          - kms:Delete*
-          - kms:ScheduleKeyDeletion
-          - kms:CancelKeyDeletion
+          - kms:*
           Effect: Allow
           Principal:
             AWS:
             - Fn::Sub: arn:aws:iam::${AWS::AccountId}:user/${IAMUsername}
           Resource: '*'
-          Sid: Allow administration of the key & encryption of new values
+          Sid: Allow administration of the key
         - Action:
           - kms:Encrypt
           - kms:Decrypt
