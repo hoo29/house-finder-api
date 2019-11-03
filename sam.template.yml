@@ -72,7 +72,7 @@ Resources:
               Fn::GetAtt:
               - HfApiRole
               - Arn
-            Fn::Sub: arn:aws:iam::${AWS::AccountId}:user/${IamUserName}
+              Fn::Sub: arn:aws:iam::${AWS::AccountId}:user/${IamUserName}
           Resource: '*'
           Sid: Allow use of the key
         Version: '2012-10-17'
