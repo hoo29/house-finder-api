@@ -26,14 +26,14 @@ export async function loadPsConfig(PS_PATH?: string) {
     if (typeof data.Parameter.Value === 'undefined') {
         throw new Error('found param but value was undefined');
     }
-    console.debug(data);
+
     const newConfig = JSON.parse(data.Parameter.Value);
-    console.debug(newConfig);
+
     const oldKeys = Object.keys(config);
     const newKeys = Object.keys(newConfig);
-    const intersection = oldKeys.filter(key => newKeys.includes(key));
-    if (intersection.length !== oldKeys.length) {
-        throw new Error('not all config items specified!');
+    const intersection = oldKeys.filter(key => !newKeys.includes(key));
+    if (intersection.length !== 0) {
+        throw new Error(`not all config items specified! ${intersection}`);
     }
 
     config = newConfig;
