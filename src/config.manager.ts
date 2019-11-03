@@ -41,11 +41,15 @@ export async function loadPsConfig(PS_PATH?: string) {
 }
 
 export function getPsConfig() {
-    if (typeof config === 'undefined') {
+    if (config.BING_MAPS_KEY === 'init') {
         throw new Error('tried to get config before it was initialised');
     }
 
     return config;
+}
+
+export function checkPsConfig() {
+    return !(config.BING_MAPS_KEY === 'init');
 }
 
 function getParameterAsyncWrapper(manager: SSM, param: SSM.GetParameterRequest) {

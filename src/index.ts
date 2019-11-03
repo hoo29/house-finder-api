@@ -3,7 +3,8 @@ import { APIGatewayEvent } from 'aws-lambda';
 import { connect, updateCache } from './database/database.service';
 import { getIsochrone } from './maps/maps.service';
 import { IsochroneRequest } from './database/database.model';
-import { loadPsConfig, getPsConfig } from './config.manager';
+import { loadPsConfig, getPsConfig, checkPsConfig } from './config.manager';
+import { connection } from 'mongoose';
 
 loadPsConfig(process.env.PS_PATH)
     .then(() => connect(getPsConfig().DATABASE_URL))
@@ -13,6 +14,10 @@ loadPsConfig(process.env.PS_PATH)
     });
 
 export async function handler(event: APIGatewayEvent) {
+    while (!checkPsConfig() || connection.readyState === 0) {
+        console.debug('config or db not loaded');
+        await new Promise(resolve => setTimeout(resolve, 20));
+    }
     const request = JSON.parse(event.body!) as IsochroneRequest;
     switch (event.httpMethod.toLowerCase()) {
         case 'post':
