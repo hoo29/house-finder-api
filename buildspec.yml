@@ -20,7 +20,7 @@ artifacts:
   type: zip
   files:
     - sam.template.yml
-    - outputtemplate.yml
+    - sam.output.template.yml
 cache:
   paths:
     - node_modules/*
