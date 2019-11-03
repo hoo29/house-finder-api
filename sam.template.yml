@@ -1,6 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: house finder api
+Parameters:
+  IAMUsername:
+    Description: Name of the IAM user who will be the administrator of the KMS key
+      we create. This user will be able to encrypt values and manage the key.
+    Type: String
 Resources:
   HouseFinderApi:
     Type: AWS::Serverless::Function
