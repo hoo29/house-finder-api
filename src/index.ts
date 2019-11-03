@@ -1,4 +1,4 @@
-import { APIGatewayEvent } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
 import { connect, updateCache } from './database/database.service';
 import { getIsochrone } from './maps/maps.service';
@@ -13,11 +13,30 @@ loadPsConfig(process.env.PS_PATH)
         process.exit(1);
     });
 
-export async function handler(event: APIGatewayEvent) {
+export async function handler(event: APIGatewayEvent): Promise<APIGatewayProxyResult> {
     while (!checkPsConfig() || connection.readyState !== 1) {
         console.debug('config or db not loaded, waiting...');
         await new Promise(resolve => setTimeout(resolve, 20));
     }
+
+    try {
+        const data = await handleRequest(event);
+        return {
+            body: data,
+            statusCode: 200,
+            isBase64Encoded: false,
+        };
+    } catch (error) {
+        console.error('something went wrong', error);
+        return {
+            body: 'something went a bit wrong',
+            statusCode: 500,
+            isBase64Encoded: false,
+        };
+    }
+}
+
+async function handleRequest(event: APIGatewayEvent) {
     const request = JSON.parse(event.body!) as IsochroneRequest;
     switch (event.httpMethod.toLowerCase()) {
         case 'post':
