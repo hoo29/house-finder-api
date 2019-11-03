@@ -12,10 +12,22 @@ enum OPTIMIZE_MODES {
     timeWithTraffic,
 }
 
+enum TIME_UNITS {
+    minute,
+    second,
+}
+
+enum DISTANCE_UNITS {
+    mi,
+    km,
+}
+
 export interface IsochroneRequest {
     waypoint: string;
     maxTime: number;
+    timeUnit?: TIME_UNITS;
     maxDistance?: string;
+    distanceUnit?: DISTANCE_UNITS;
     dateTime?: number;
     optimize?: OPTIMIZE_MODES;
     travelMode: TRAVEL_MODES;
@@ -35,8 +47,16 @@ const cacheSchema = new Schema({
         required: true,
     },
     maxTime: { type: Number, required: true },
+    timeUnit: {
+        type: String,
+        enum: ['minute', 'second'],
+    },
     maxDistance: {
         type: Number,
+    },
+    distanceUnit: {
+        type: String,
+        enum: ['mi', 'km'],
     },
     dateTime: {
         type: Number,
