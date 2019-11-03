@@ -22,7 +22,7 @@ export async function handler(event: APIGatewayEvent): Promise<APIGatewayProxyRe
     try {
         const data = await handleRequest(event);
         return {
-            body: data,
+            body: JSON.stringify(data),
             statusCode: 200,
             isBase64Encoded: false,
         };
