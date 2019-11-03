@@ -2,8 +2,8 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: house finder api
 Parameters:
-  IAMUsername:
-    Description: Name of the IAM user who will be the administrator of the KMS key
+  ServiceRoleName:
+    Description: Name of the service role who will be the administrator of the KMS key
       we create. This user will be able to encrypt values and manage the key.
     Type: String
 Resources:
@@ -37,11 +37,22 @@ Resources:
         Id: key-default-1
         Statement:
         - Action:
-          - kms:*
+          - kms:Create*
+          - kms:Describe*
+          - kms:Enable*
+          - kms:List*
+          - kms:Put*
+          - kms:Update*
+          - kms:Revoke*
+          - kms:Disable*
+          - kms:Get*
+          - kms:Delete*
+          - kms:ScheduleKeyDeletion
+          - kms:CancelKeyDeletion
           Effect: Allow
           Principal:
             AWS:
-            - Fn::Sub: arn:aws:iam::${AWS::AccountId}:user/${IAMUsername}
+            - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/${ServiceRoleName}
           Resource: '*'
           Sid: Allow administration of the key
         - Action:
