@@ -7,7 +7,7 @@ Resources:
     Properties:
       Handler: index.handler
       Runtime: nodejs10.x
-      CodeUri: ./
+      CodeUri: ./build
       Events:
         house-finder-api-gateway:
           Type: Api
