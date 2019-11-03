@@ -27,10 +27,10 @@ Resources:
         Variables:
           PS_PATH: house-finder-api
       Events:
-        hfAPI:
+        hfGatewayAPI:
           Type: Api
           Properties:
-            Path: /house-finder-api
+            Path: /hsapi
             Method: ANY
   HfApiEncKey:
     Properties:
