@@ -79,7 +79,7 @@ Resources:
     Type: AWS::KMS::Key
   HfApiEncKeyAlias:
     Properties:
-      AliasName: alias/HfApiEncKey
+      AliasName: alias/HfApiEncKeyCf
       TargetKeyId:
         Ref: HfApiEncKey
     Type: AWS::KMS::Alias
