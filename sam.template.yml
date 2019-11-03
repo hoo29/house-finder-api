@@ -57,7 +57,7 @@ Resources:
           Principal:
             AWS:
             - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/${ServiceRoleName}
-            - arn:aws:iam::${AWS::AccountId}:user/${IamUserName}
+            - Fn::Sub: arn:aws:iam::${AWS::AccountId}:user/${IamUserName}
           Resource: '*'
           Sid: Allow administration of the key
         - Action:
@@ -72,7 +72,7 @@ Resources:
               Fn::GetAtt:
               - HfApiRole
               - Arn
-            - arn:aws:iam::${AWS::AccountId}:user/${IamUserName}
+            - Fn::Sub: arn:aws:iam::${AWS::AccountId}:user/${IamUserName}
           Resource: '*'
           Sid: Allow use of the key
         Version: '2012-10-17'
