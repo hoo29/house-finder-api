@@ -3,7 +3,11 @@ import { IsochroneRequest, IsochroneCacheModel, IsochroneResult } from './databa
 
 export async function connect(url: string) {
     console.debug('db connecting');
-    await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+    });
 
     process.on('SIGINT', handleClose);
     process.on('SIGTERM', handleClose);
