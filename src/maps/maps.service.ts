@@ -29,11 +29,11 @@ async function pollAsync(res: any) {
     return res.resourceSets[0].resources[0].resultUrl;
 }
 
-export async function getIsochrone(query: IsochroneRequest) {
+export async function getIsochrone(query: IsochroneRequest, bingMapsKey: string) {
     const isoAsyncRes = await rp.get('https://dev.virtualearth.net/REST/v1/Routes/IsochronesAsync', {
         qs: {
             ...query,
-            key: process.env.BING_MAPS_KEY,
+            key: bingMapsKey,
         },
         json: true,
     });
