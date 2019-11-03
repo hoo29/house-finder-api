@@ -14,8 +14,8 @@ loadPsConfig(process.env.PS_PATH)
     });
 
 export async function handler(event: APIGatewayEvent) {
-    while (!checkPsConfig() || connection.readyState === 0) {
-        console.debug('config or db not loaded');
+    while (!checkPsConfig() || connection.readyState !== 1) {
+        console.debug('config or db not loaded, waiting...');
         await new Promise(resolve => setTimeout(resolve, 20));
     }
     const request = JSON.parse(event.body!) as IsochroneRequest;
