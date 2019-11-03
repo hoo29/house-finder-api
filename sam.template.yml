@@ -9,7 +9,7 @@ Resources:
       Runtime: nodejs10.x
       CodeUri: ./build
       Events:
-        house-finder-api-gateway:
+        hfAPI:
           Type: Api
           Properties:
             Path: /house-finder-api
