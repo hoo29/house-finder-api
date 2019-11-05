@@ -16,11 +16,10 @@ phases:
     commands:
       - aws cloudformation package --template-file sam.template.yml --s3-bucket $BUCKET --output-template-file sam.output.template.yml
 artifacts:
-  type: zip
   files:
     - sam.template.yml
     - sam.output.template.yml
 cache:
   paths:
-    - node_modules/*
-    - build/node_modules/*
+    - node_modules/**/*
+    - build/node_modules/**/*
