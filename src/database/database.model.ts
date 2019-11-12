@@ -1,32 +1,32 @@
 import { Schema, model, Document } from 'mongoose';
 
 enum TRAVEL_MODES {
-    driving,
-    walking,
-    transit,
+    driving = 'driving',
+    walking = 'walking',
+    transit = 'walking',
 }
 
 enum OPTIMIZE_MODES {
-    distance,
-    time,
-    timeWithTraffic,
+    distance = 'distance',
+    time = 'time',
+    timeWithTraffic = 'timeWithTraffic',
 }
 
 enum TIME_UNITS {
-    minute,
-    second,
+    minute = 'minute',
+    second = 'second',
 }
 
 enum DISTANCE_UNITS {
-    mi,
-    km,
+    mi = 'mi',
+    km = 'km',
 }
 
 export interface IsochroneRequest {
     waypoint: string;
-    maxTime: number;
+    maxTime?: number;
     timeUnit?: TIME_UNITS;
-    maxDistance?: string;
+    maxDistance?: number;
     distanceUnit?: DISTANCE_UNITS;
     dateTime?: string;
     optimize?: OPTIMIZE_MODES;
@@ -46,7 +46,7 @@ const cacheSchema = new Schema({
         type: String,
         required: true,
     },
-    maxTime: { type: Number, required: true },
+    maxTime: { type: Number },
     timeUnit: {
         type: String,
         enum: ['minute', 'second'],
