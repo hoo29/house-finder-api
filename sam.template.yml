@@ -1,6 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: house finder api
+Globals:
+  Api:
+      Cors: "'*'"
 Parameters:
   ServiceRoleName:
     Description: Name of the service role who will administer the KMS key
@@ -30,15 +33,8 @@ Resources:
         hfGatewayAPI:
           Type: Api
           Properties:
-            RestApiId: HfApiGateway
             Path: /hsapi
             Method: ANY
-  HfApiGateway:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: prod
-      Cors:
-        AllowOrigin: "'*'"
   HfApiEncKey:
     Properties:
       Description: Encryption key for secret config values for the Parameter Store
