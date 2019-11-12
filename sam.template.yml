@@ -30,10 +30,15 @@ Resources:
         hfGatewayAPI:
           Type: Api
           Properties:
+            RestApiId: HfApiGateway
             Path: /hsapi
             Method: ANY
-            Cors:
-              AllowOrigin: "'*'"
+  HfApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Cors:
+        AllowOrigin: "'*'"
   HfApiEncKey:
     Properties:
       Description: Encryption key for secret config values for the Parameter Store
