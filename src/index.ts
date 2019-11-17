@@ -19,9 +19,14 @@ export async function handler(event: APIGatewayEvent): Promise<APIGatewayProxyRe
         await new Promise(resolve => setTimeout(resolve, 20));
     }
 
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+    };
+
     try {
         const data = await handleRequest(event);
         return {
+            headers,
             body: JSON.stringify(data),
             statusCode: 200,
             isBase64Encoded: false,
@@ -29,6 +34,7 @@ export async function handler(event: APIGatewayEvent): Promise<APIGatewayProxyRe
     } catch (error) {
         console.error('something went wrong', error);
         return {
+            headers,
             body: 'something went a bit wrong',
             statusCode: 500,
             isBase64Encoded: false,
