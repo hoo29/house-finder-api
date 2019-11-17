@@ -3,7 +3,9 @@ Transform: AWS::Serverless-2016-10-31
 Description: house finder api
 Globals:
   Api:
-    Cors: "'*'"
+    Cors:
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
     EndpointConfiguration: REGIONAL
 Parameters:
   ServiceRoleName:
