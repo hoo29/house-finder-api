@@ -3,7 +3,8 @@ Transform: AWS::Serverless-2016-10-31
 Description: house finder api
 Globals:
   Api:
-      Cors: "'*'"
+    Cors: "'*'"
+    EndpointConfiguration: REGIONAL
 Parameters:
   ServiceRoleName:
     Description: Name of the service role who will administer the KMS key
