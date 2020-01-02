@@ -1,5 +1,5 @@
 import rp from 'request-promise-native';
-import { IsochroneRequest } from '../database/database.model';
+import { IsochroneRequest, LocationRequest } from '../database/database.model';
 
 const setTimeoutProm = (timeout: number) => new Promise(resolve => setTimeout(resolve, timeout));
 
@@ -35,6 +35,7 @@ export async function getIsochrone(query: IsochroneRequest, bingMapsKey: string)
     const isoAsyncRes = await rp.get('https://dev.virtualearth.net/REST/v1/Routes/IsochronesAsync', {
         qs: {
             ...query,
+            c: 'en-GB',
             key: bingMapsKey,
         },
         json: true,
@@ -51,4 +52,23 @@ export async function getIsochrone(query: IsochroneRequest, bingMapsKey: string)
     }
     console.debug('got results');
     return polyData;
+}
+
+export async function getPointsFromPostCode(query: LocationRequest, bingMapsKey: string) {
+    const result = await rp.get(`https://dev.virtualearth.net/REST/v1/Locations/UK/${query.postcode.trim()}`, {
+        qs: {
+            key: bingMapsKey,
+            c: 'en-GB',
+        },
+        json: true,
+    });
+
+    const point = result?.resourceSets[0]?.resources[0]?.point.coordinates;
+
+    if (typeof point === 'undefined') {
+        console.error('no points returned', result);
+        throw new Error('could not find point for postcode');
+    }
+
+    return point;
 }

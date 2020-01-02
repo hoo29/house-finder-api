@@ -1,8 +1,8 @@
 import { APIGatewayEvent, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
 import { connect, updateCache } from './database/database.service';
-import { getIsochrone } from './maps/maps.service';
-import { IsochroneRequest } from './database/database.model';
+import { getIsochrone, getPointsFromPostCode } from './maps/maps.service';
+import { IsochroneRequest, LocationRequest } from './database/database.model';
 import { loadPsConfig, getPsConfig, checkPsConfig } from './config.manager';
 import { connection } from 'mongoose';
 
@@ -43,16 +43,33 @@ export async function handler(event: APIGatewayEvent): Promise<APIGatewayProxyRe
 }
 
 async function handleRequest(event: APIGatewayEvent) {
-    const request = JSON.parse(event.body!) as IsochroneRequest;
     switch (event.httpMethod.toLowerCase()) {
         case 'post':
-            return handlePost(request);
+            return handlePost(event);
         default:
             throw new Error(`unsupported operation ${event.httpMethod.toLowerCase()}`);
     }
 }
 
-async function handlePost(request: IsochroneRequest) {
+async function handlePost(event: APIGatewayEvent) {
+    switch (event.path) {
+        case '/hsapi/isochrone':
+            return handleIsoRequest(event);
+        case '/hsapi/loc':
+            return handleIsoRequest(event);
+        default:
+            throw new Error(`unsupported path ${event.path}`);
+    }
+}
+
+async function handleLocRequest(event: APIGatewayEvent) {
+    const request = JSON.parse(event.body!) as LocationRequest;
+    const results = await getPointsFromPostCode(request, getPsConfig().BING_MAPS_KEY);
+    return results;
+}
+
+async function handleIsoRequest(event: APIGatewayEvent) {
+    const request = JSON.parse(event.body!) as IsochroneRequest;
     const results = await getIsochrone(request, getPsConfig().BING_MAPS_KEY);
     if (request.cache) {
         await updateCache({ ...request, polygonResults: results, user: 'me' });

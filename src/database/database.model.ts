@@ -22,6 +22,10 @@ enum DISTANCE_UNITS {
     km = 'km',
 }
 
+export interface LocationRequest {
+    postcode: string;
+}
+
 export interface IsochroneRequest {
     waypoint: string;
     maxTime?: number;
