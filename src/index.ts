@@ -56,18 +56,11 @@ async function handlePost(event: APIGatewayEvent) {
         case '/hsapi/isochrone':
             return handleIsoRequest(event);
         case '/hsapi/loc':
-            return handleIsoRequest(event);
+            return handleLocRequest(event);
         default:
             throw new Error(`unsupported path ${event.path}`);
     }
 }
-
-async function handleLocRequest(event: APIGatewayEvent) {
-    const request = JSON.parse(event.body!) as LocationRequest;
-    const results = await getPointsFromPostCode(request, getPsConfig().BING_MAPS_KEY);
-    return results;
-}
-
 async function handleIsoRequest(event: APIGatewayEvent) {
     const request = JSON.parse(event.body!) as IsochroneRequest;
     const results = await getIsochrone(request, getPsConfig().BING_MAPS_KEY);
@@ -75,5 +68,11 @@ async function handleIsoRequest(event: APIGatewayEvent) {
         await updateCache({ ...request, polygonResults: results, user: 'me' });
     }
 
+    return results;
+}
+
+async function handleLocRequest(event: APIGatewayEvent) {
+    const request = JSON.parse(event.body!) as LocationRequest;
+    const results = await getPointsFromPostCode(request, getPsConfig().BING_MAPS_KEY);
     return results;
 }
