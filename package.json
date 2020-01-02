@@ -14,20 +14,20 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.34",
-    "@types/mongoose": "^5.5.28",
-    "@types/node": "^12.12.3",
-    "@types/request": "^2.48.3",
+    "@types/aws-lambda": "^8.10.39",
+    "@types/mongoose": "^5.5.37",
+    "@types/node": "^13.1.2",
+    "@types/request": "^2.48.4",
     "@types/request-promise-native": "^1.0.17",
-    "prettier": "^1.18.2",
-    "tslint": "^5.20.0",
+    "prettier": "^1.19.1",
+    "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.6.4"
+    "typescript": "^3.7.4"
   },
   "dependencies": {
-    "aws-sdk": "^2.562.0",
-    "mongoose": "^5.7.7",
+    "aws-sdk": "^2.596.0",
+    "mongoose": "^5.8.3",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7"
+    "request-promise-native": "^1.0.8"
   }
 }

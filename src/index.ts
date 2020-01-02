@@ -35,7 +35,7 @@ export async function handler(event: APIGatewayEvent): Promise<APIGatewayProxyRe
         console.error('something went wrong', error);
         return {
             headers,
-            body: 'something went a bit wrong',
+            body: JSON.stringify({ error: 'something went a bit wrong' }),
             statusCode: 500,
             isBase64Encoded: false,
         };
