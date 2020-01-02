@@ -33,10 +33,15 @@ Resources:
         Variables:
           PS_PATH: house-finder-api
       Events:
-        hfGatewayAPI:
+        hfIsoGatewayAPI:
           Type: Api
           Properties:
-            Path: /hsapi
+            Path: /hsapi/isochrone
+            Method: ANY
+        hfLocGatewayAPI:
+          Type: Api
+          Properties:
+            Path: /hsapi/loc
             Method: ANY
   HfApiEncKey:
     Properties:
