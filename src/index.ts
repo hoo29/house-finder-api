@@ -1,6 +1,12 @@
-import { APIGatewayEvent, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
 
-import { connect, updateCache } from './database/database.service';
+import {
+    connect,
+    updateIsoCache,
+    checkLocationCache,
+    updateLocCache,
+    checkIsoCache,
+} from './database/database.service';
 import { getIsochrone, getPointsFromPostCode } from './maps/maps.service';
 import { IsochroneRequest, LocationRequest } from './database/database.model';
 import { loadPsConfig, getPsConfig, checkPsConfig } from './config.manager';
@@ -22,6 +28,8 @@ export async function handler(event: APIGatewayEvent): Promise<APIGatewayProxyRe
     const headers = {
         'Access-Control-Allow-Origin': '*',
     };
+
+    console.debug('new request', event);
 
     try {
         const data = await handleRequest(event);
@@ -63,16 +71,32 @@ async function handlePost(event: APIGatewayEvent) {
 }
 async function handleIsoRequest(event: APIGatewayEvent) {
     const request = JSON.parse(event.body!) as IsochroneRequest;
-    const results = await getIsochrone(request, getPsConfig().BING_MAPS_KEY);
-    if (request.cache) {
-        await updateCache({ ...request, polygonResults: results, user: 'me' });
+    console.debug('checking cache for iso', request);
+    const cache = await checkIsoCache(request);
+    if (cache !== null) {
+        console.debug('cache hit');
+        return cache.toObject({ versionKey: false });
+    } else {
+        console.debug('cache miss');
+        const results = await getIsochrone(request, getPsConfig().BING_MAPS_KEY);
+        await updateIsoCache({ ...request, polygonResults: results });
+        console.debug('cache updated');
+        return { polygonResults: results };
     }
-
-    return results;
 }
 
 async function handleLocRequest(event: APIGatewayEvent) {
     const request = JSON.parse(event.body!) as LocationRequest;
-    const results = await getPointsFromPostCode(request, getPsConfig().BING_MAPS_KEY);
-    return results;
+    console.debug('checking cache for location', request);
+    const cache = await checkLocationCache(request);
+    if (cache !== null) {
+        console.debug('cache hit');
+        return cache.toObject({ versionKey: false });
+    } else {
+        console.debug('cache miss');
+        const results = await getPointsFromPostCode(request, getPsConfig().BING_MAPS_KEY);
+        await updateLocCache({ postcode: request.postcode, point: results });
+        console.debug('cache updated');
+        return results;
+    }
 }

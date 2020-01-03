@@ -26,6 +26,24 @@ export interface LocationRequest {
     postcode: string;
 }
 
+export interface LocationResult extends LocationRequest {
+    point: number[];
+}
+
+export interface LocationCacheModel extends Document, LocationRequest {}
+
+const locationSchema = new Schema({
+    postcode: {
+        type: String,
+        required: true,
+        index: true,
+    },
+    point: {
+        type: Array,
+        required: true,
+    },
+});
+
 export interface IsochroneRequest {
     waypoint: string;
     maxTime?: number;
@@ -40,7 +58,6 @@ export interface IsochroneRequest {
 
 export interface IsochroneResult extends IsochroneRequest {
     polygonResults: any[];
-    user: string;
 }
 
 export interface IsochroneCacheModel extends Document, IsochroneResult {}
@@ -75,12 +92,10 @@ const cacheSchema = new Schema({
         enum: ['driving', 'walking', 'transit'],
         required: true,
     },
-    user: {
-        type: String,
-        index: true,
-        required: true,
-    },
     polygonResults: { type: [], required: true },
 });
 
+cacheSchema.index({ waypoint: -1, maxTime: -1, dateTime: -1 });
+
 export const IsochroneCacheModel = model<IsochroneCacheModel>('isochrones', cacheSchema);
+export const LocationCacheModel = model<LocationCacheModel>('locations', locationSchema);

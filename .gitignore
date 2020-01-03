@@ -64,3 +64,4 @@ typings/
 
 tsconfig.tsbuildinfo
 **/sam.output.template.yml
+test_events

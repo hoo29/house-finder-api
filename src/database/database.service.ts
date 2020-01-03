@@ -1,5 +1,12 @@
 import mongoose from 'mongoose';
-import { IsochroneRequest, IsochroneCacheModel, IsochroneResult } from './database.model';
+import {
+    IsochroneRequest,
+    IsochroneCacheModel,
+    IsochroneResult,
+    LocationRequest,
+    LocationCacheModel,
+    LocationResult,
+} from './database.model';
 
 export async function connect(url: string) {
     console.debug('db connecting');
@@ -14,14 +21,24 @@ export async function connect(url: string) {
     console.debug('db connected');
 }
 
-export async function checkCache(query: IsochroneRequest): Promise<null | IsochroneCacheModel> {
+export async function checkIsoCache(query: IsochroneRequest): Promise<null | IsochroneCacheModel> {
     const results = await IsochroneCacheModel.findOne(query).exec();
 
     return results;
 }
 
-export async function updateCache(results: IsochroneResult) {
+export async function updateIsoCache(results: IsochroneResult) {
     await new IsochroneCacheModel(results).save();
+}
+
+export async function checkLocationCache(query: LocationRequest): Promise<null | LocationCacheModel> {
+    const results = await LocationCacheModel.findOne(query).exec();
+
+    return results;
+}
+
+export async function updateLocCache(results: LocationResult) {
+    await new LocationCacheModel(results).save();
 }
 
 function handleClose() {
